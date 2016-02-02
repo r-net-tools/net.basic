@@ -1,4 +1,4 @@
-Package: R.net.tools
+Package: net.basic
 Title: Network related functions and tools
 Version: 0.1
 Authors@R: person("Humbert", "Costas", email = "humbert.costas@gmail.com",
@@ -8,6 +8,8 @@ Description: This package pretends to be a toolkit for get and manipulate
 Imports:
     XML,
     bitops,
+    rjson,
+    stringr,
     plyr,
     R.utils
 URL: 

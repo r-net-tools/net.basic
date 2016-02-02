@@ -1,0 +1,7 @@
+export(ip2long)
+export(long2ip)
+export(ip_in_CIDR)
+export(whatismyip)
+export(hasIPformat)
+export(getIPaddress)
+export(freegeoip)
