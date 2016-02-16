@@ -1,7 +1,3 @@
-# ================
-# Public Functions
-# ================
-
 #' ip2long
 #' Transforma una IP "192.168.0.1" a integer 3232235521
 #' 
@@ -12,7 +8,7 @@
 #' ip <- ip2long("192.168.0.1")
 ip2long <- function(ip) {
     # transforma a vector de characters
-    ips <- unlist(strsplit(ip, '.', fixed=TRUE))
+    ips <- unlist(strsplit(ip, '.', fixed = TRUE))
     # set up a function to bit-shift, then "OR" the octets
     octet <- function(x,y) bitops::bitOr(bitops::bitShiftL(x, 8), y)
     # Reduce applys a function cumulatively left to right
@@ -29,7 +25,7 @@ long2ip <- function(longip) {
     # set up reversing bit manipulation
     octet <- function(nbits) bitops::bitAnd(bitops::bitShiftR(longip, nbits), 0xFF)
     # Map applys a function to each element of the argument
-    return(paste(Map(octet, c(24,16,8,0)), sep="", collapse="."))
+    return(paste(Map(octet, c(24,16,8,0)), sep = "", collapse = "."))
 }
 
 #' ip_in_CIDR
@@ -44,7 +40,7 @@ ip_in_CIDR <- function(ip, cidr) {
     long.ip <- ip2long(ip)
     cidr.parts <- unlist(strsplit(cidr, "/"))
     cidr.range <- ip2long(cidr.parts[1])
-    cidr.mask <- bitops::bitShiftL(bitops::bitFlip(0), (32-as.integer(cidr.parts[2])))
+    cidr.mask <- bitops::bitShiftL(bitops::bitFlip(0), (32 - as.integer(cidr.parts[2])))
     return(bitops::bitAnd(long.ip, cidr.mask) == bitops::bitAnd(cidr.range, cidr.mask))
 }
 
@@ -57,7 +53,7 @@ ip_in_CIDR <- function(ip, cidr) {
 whatismyip <- function() {
     return(
       rjson::fromJSON(
-        readLines("http://api.hostip.info/get_json.php", warn=F))$ip
+        readLines("http://api.hostip.info/get_json.php", warn = F))$ip
     )
 }
 
@@ -74,7 +70,7 @@ hasIPformat <- function(ip) {
     if (b == TRUE) 
     {
         k <- unlist(strsplit(ip,".", fixed = TRUE))
-        b <- all(sapply(k, function(x) as.integer(x)<256) == TRUE)
+        b <- all(sapply(k, function(x) as.integer(x) < 256) == TRUE)
     }
     return(as.logical(b))
 }
@@ -88,15 +84,15 @@ hasIPformat <- function(ip) {
 #'
 #' @examples
 getIPaddress <- function(hostname) {
-    results <- sapply(hostname, function(x) system(paste("nslookup",x), intern=TRUE))
-    if (length(results) ==6)
+    results <- sapply(hostname, function(x) system(paste("nslookup",x), intern = T))
+    if (length(results) == 6)
     {
         ip <- stringr::str_extract(results[6,], stringr::perl("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}"))  
     }
     else{
         if (length(results) > 6)
         {
-            ip <- stringr::str_extract(results[6:(length(results)-1),], stringr::perl("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}"))  
+            ip <- stringr::str_extract(results[6:(length(results) - 1),], stringr::perl("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}"))  
         }
         else ip <- "NA"
     }
@@ -113,12 +109,12 @@ getIPaddress <- function(hostname) {
 #' @export
 #'
 #' @examples
-freegeoip <- function(ip, format = ifelse(length(ip)==1,'list','dataframe')) {
+freegeoip <- function(ip, format = ifelse(length(ip) == 1,'list','dataframe')) {
     if (1 == length(ip))
     {
         # a single IP address
-        url <- paste(c("http://freegeoip.net/json/", ip), collapse='')
-        ret <- rjson::fromJSON(readLines(url, warn=FALSE))
+        url <- paste(c("http://freegeoip.net/json/", ip), collapse = '')
+        ret <- rjson::fromJSON(readLines(url, warn = F))
         if (format == 'dataframe')
             ret <- data.frame(t(unlist(ret)))
         return(ret)
@@ -126,10 +122,9 @@ freegeoip <- function(ip, format = ifelse(length(ip)==1,'list','dataframe')) {
         ret <- data.frame()
         for (i in 1:length(ip))
         {
-            r <- freegeoip(ip[i], format="dataframe")
+            r <- freegeoip(ip[i], format = "dataframe")
             ret <- rbind(ret, r)
         }
         return(ret)
     }
 } 
-
