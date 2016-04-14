@@ -1,11 +1,10 @@
 Package: net.basic
 Title: Network related functions and tools
 Version: 0.1
-Authors@R: person("Humbert", "Costas", email = "humbert.costas@gmail.com",
-                  role = c("aut", "cre"))
+Authors@R: person("Humbert", "Costas", email = "humbert.costas@gmail.com", role = c("aut", "cre"))
 Description: This package pretends to be a toolkit for get and manipulate
     information for network related resources.
-Imports:
+Imports: 
     XML,
     bitops,
     rjson,
@@ -17,3 +16,4 @@ BugReports:
 License: What license is it under?
 LazyData: true
 RoxygenNote: 5.0.1.9000
+Suggests: testthat
