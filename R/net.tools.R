@@ -130,8 +130,6 @@ freegeoip <- function(ip, format = ifelse(length(ip) == 1,'list','dataframe')) {
 } 
 
 
-
- 
 #'getProtocolFromPort
 #'
 #'given a well known port number and true for TCP, False for UDP returns the protocol name that runs behind
@@ -141,10 +139,8 @@ freegeoip <- function(ip, format = ifelse(length(ip) == 1,'list','dataframe')) {
 #'
 #' @return
 #' @export
-#'
-#' @examples
 getProtocolFromPort <- function(port, istcp) { #parametre download
-  url <- "http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv"
+  #url <- "http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv"
   oldcsvfile <- "./data/service-names-port-numbers.csv"
   newcsvfile <- "./data/service-names-port-numbers-new.csv"
   warnmessage <- "Downloading IANA ports CSV file failed, using the local file with date 2016-06-01"
@@ -157,12 +153,40 @@ getProtocolFromPort <- function(port, istcp) { #parametre download
     warning(warnmessage)
   })
   if (downloadfailed) {newcsvfile <- oldcsvfile}
-  df <- read.csv(file=newcsvfile, header=TRUE, sep=",")
-  df <-subset(df, select=c("Service.Name", "Port.Number", "Transport.Protocol"))
-  df <- subset(df, Port.Number==port)
-  df <- subset(df, Transport.Protocol==ifelse(istcp,"tcp","udp"))
+  df <- read.csv(file = newcsvfile, header = TRUE, sep = ",")
+  df <- subset(df, select = c("Service.Name", "Port.Number", "Transport.Protocol"))
+  df <- subset(df, Port.Number == port)
+  df <- subset(df, Transport.Protocol == ifelse(istcp,"tcp","udp"))
   res <- as.character(df$Service.Name)
   return(res)
 } 
 
+#' hex2ip
+#' Transform an 8 bytes hexadecimal string to ip address
+#'
+#' @param hex 
+#' ip <- hex2ip("c0a80001")
+hex2ip <- function(hex){
+  if (nchar(hex) == 8) {
+    chunks <- lapply(seq(1, nchar(hex), 2), function(i) substr(hex, i, i + 1))
+    ip <- paste(strtoi(chunks, 16), sep = "", collapse = ".")
+  }
+  else ip <- "NA"
+  return(ip)
+}
 
+#' ip2hex
+#' Transform an ip address to hexadecimal
+#'
+#' @param ip 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' hex <- ip2hex("192.168.0.1")
+ip2hex <- function(ip){
+  chunks <- strtoi(unlist(strsplit(ip, '.', fixed = TRUE)))
+  format <- lapply(chunks, function(i) sprintf("%02x",as.hexmode(i)))
+  return(paste(format, sep = "", collapse = ""));
+}
