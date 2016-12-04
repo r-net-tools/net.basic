@@ -132,7 +132,7 @@ getProtocolFromPort <- function(port, istcp) { #parametre download
     warning(warnmessage)
   })
   if (downloadfailed) {newcsvfile <- oldcsvfile}
-  df <- read.csv(file = newcsvfile, header = TRUE, sep = ",")
+  df <- utils::read.csv(file = newcsvfile, header = TRUE, sep = ",")
   df <- subset(df, select = c("Service.Name", "Port.Number", "Transport.Protocol"))
   df <- subset(df, Port.Number == port)
   df <- subset(df, Transport.Protocol == ifelse(istcp,"tcp","udp"))

@@ -2,8 +2,7 @@ Package: net.basic
 Title: Network related functions and tools
 Version: 0.1
 Authors@R: person("Humbert", "Costas", email = "humbert.costas@gmail.com", role = c("aut", "cre"))
-Description: This package pretends to be a toolkit for get and manipulate
-    information for network related resources.
+Description: The sheer purpose of this package is to offer a base from which to explore the structure of an R package.
 Imports:
     XML,
     bitops,
@@ -13,7 +12,7 @@ Imports:
     R.utils
 URL: 
 BugReports: 
-License: What license is it under?
+License: MIT
 LazyData: true
 RoxygenNote: 5.0.1
 Suggests:
