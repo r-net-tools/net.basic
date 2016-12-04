@@ -128,3 +128,41 @@ freegeoip <- function(ip, format = ifelse(length(ip) == 1,'list','dataframe')) {
         return(ret)
     }
 } 
+
+
+
+ 
+#'getProtocolFromPort
+#'
+#'given a well known port number and true for TCP, False for UDP returns the protocol name that runs behind
+#'
+#' @param port well known port number
+#' @param istcp boolean, True for TCP, False for UDP
+#'
+#' @return
+#' @export
+#'
+#' @examples
+getProtocolFromPort <- function(port, istcp) { #parametre download
+  url <- "http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv"
+  oldcsvfile <- "./data/service-names-port-numbers.csv"
+  newcsvfile <- "./data/service-names-port-numbers-new.csv"
+  warnmessage <- "Downloading IANA ports CSV file failed, using the local file with date 2016-06-01"
+  downloadfailed <- FALSE
+  tryCatch({
+    #download.file(url, newcsvfile)
+  }, 
+  error = function(e){
+    downloadfailed <<- TRUE
+    warning(warnmessage)
+  })
+  if (downloadfailed) {newcsvfile <- oldcsvfile}
+  df <- read.csv(file=newcsvfile, header=TRUE, sep=",")
+  df <-subset(df, select=c("Service.Name", "Port.Number", "Transport.Protocol"))
+  df <- subset(df, Port.Number==port)
+  df <- subset(df, Transport.Protocol==ifelse(istcp,"tcp","udp"))
+  res <- as.character(df$Service.Name)
+  return(res)
+} 
+
+
