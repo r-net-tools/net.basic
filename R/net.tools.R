@@ -128,3 +128,39 @@ freegeoip <- function(ip, format = ifelse(length(ip) == 1,'list','dataframe')) {
         return(ret)
     }
 } 
+
+
+#' hex2ip
+#' Transform an 8 bytes hexadecimal string to ip address
+#'
+#' @param hex 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' ip <- hex2ip("c0a80001")
+hex2ip <- function(hex){
+  if(nchar(hex) == 8){
+    chunks <- lapply(seq(1,nchar(hex),2), function(i) substr(hex, i, i+1))
+    ip <- paste(strtoi(chunks, 16), sep = "", collapse = ".")
+  }
+  else ip <- "NA"
+  return(ip)
+}
+
+#' ip2hex
+#' Transform an ip address to hexadecimal
+#'
+#' @param ip 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' hex <- ip2hex("192.168.0.1")
+ip2hex <- function(ip){
+  chunks <- strtoi(unlist(strsplit(ip, '.', fixed = TRUE)))
+  format <- lapply(chunks, function(i) sprintf("%02x",as.hexmode(i)))
+  return(paste(format, sep = "", collapse = ""));
+}
